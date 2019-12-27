@@ -33,12 +33,13 @@ var io = require('socket.io')(http);
 const order_io = io.of('/order');
 const bartender_io = io.of('/bartender');
 const cashier_io = io.of('/cashier');
+const summary_io = io.of('/summary');
 
 order_io.on('connection', function(socket: any) {
   socket.on('new', function(order_info: any) {
 
     db.Order.create({
-      genre: parseInt(order_info.genre),
+      mixture: parseInt(order_info.mixture),
       randomized_by_user: false,
       finished_by_bartender: false,
       paid: false,
@@ -58,7 +59,7 @@ bartender_io.on('connection', function(socket: any) {
       finished_by_bartender: false,
     },
     order: [
-      ['createdAt', 'ASC'],
+      ['updatedAt', 'ASC'],
     ],
     raw: true,
   })
@@ -69,14 +70,17 @@ bartender_io.on('connection', function(socket: any) {
   socket.on('finish', function(id: any) {
     db.Order.update(
       { finished_by_bartender: true },
-      {
-        where: { id: id },
-        returning: true,
-      },
+      { where: { id: id } },
     )
-    .then((result: any) => {
+    .then(async () => {
       socket.emit('finished', id);
-      cashier_io.emit('new', result);
+
+      db.Order.findOne({
+        where: { id: id },
+      })
+      .then((result: any) => {
+        cashier_io.emit('new', result);
+      });
     });
   });
 });
@@ -85,10 +89,11 @@ cashier_io.on('connection', function(socket: any) {
 
   db.Order.findAll({
     where: {
+      finished_by_bartender: true,
       paid: false,
     },
     order: [
-      ['createdAt', 'ASC'],
+      ['updatedAt', 'ASC'],
     ],
     raw: true,
   })
@@ -103,6 +108,31 @@ cashier_io.on('connection', function(socket: any) {
     )
     .then(() => {
       socket.emit('paid', id);
+
+      db.Order.findOne({
+        where: { id: id },
+      })
+      .then((result: any) => {
+        summary_io.emit('new', result);
+      });
     });
+  });
+});
+
+
+summary_io.on('connection', function(socket: any) {
+
+  db.Order.findAll({
+    where: {
+      finished_by_bartender: true,
+      paid: true,
+    },
+    order: [
+      ['updatedAt', 'ASC'],
+    ],
+    raw: true,
+  })
+  .then((result: any) => {
+    socket.emit('remain', result);
   });
 });

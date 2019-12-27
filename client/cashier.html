@@ -46,12 +46,17 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light">
       <span class="navbar-brand"><h1>Cashier</h1></span>
+      
+      <button class="btn" type="button" id="mix-conn-status-btn">
+        <span class="fa fa-redo"></span>
+      </button>
     </nav>
 
     <div class="mix-right-pane">
-      <button type="button" class="btn btn-success" id="mix-finished-btn"><i class="fas fa-dollar-sign"></i> Paid</button>
+      <button type="button" class="btn btn-success" id="mix-pay-btn"><i class="fas fa-dollar-sign"></i> Paid</button>
+      <div style="margin-top: 30px; text-align: center;" class="jumbotron" id="mix-pay-info"></div>
     </div>
 
     <div class="list-group mix-list-container" id="mix-order-list">
@@ -62,8 +67,11 @@
     <script src="js/socket.io.js"></script>
     <script>
 
-      const GENRES = ['Rock', 'Hip-Hop', 'Jazz', 'Electronics', 'Funk', 'Something'];
-      const PRICE_PER_SHOT = 80;
+      const MIXTURES = ['Jazzcuzzi', 'Frisky', 'Latinos', 'Eelektross', 'Rockumantary', 'A K A Hip'];
+      const COLORS = ['#CDC0DF', '#FCD6D6', '#FFCF59', '#B070AF', '#F5949E', '#FBF27E'];
+      const GENRES = ['Jazz', 'Funk', 'Latin', 'Electronics', 'Rock', 'Hip-Hop'];
+
+      const PRICE_PER_SHOT = 650;
 
       var socket = io('http://localhost:3000/cashier', {
         reconnection: true,
@@ -75,27 +83,54 @@
         $('#mix-order-list').empty();
         data.forEach((v) => {
           $('#mix-order-list').append(`
-            <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${v.id}">#${v.id} ${GENRES[v.genre]}</a>
+            <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${v.id}" data-mix-order-mixture="${v.mixture}">
+              <span class="badge badge-secondary">#${v.id}</span>
+              <span>${MIXTURES[v.mixture]}</span>
+              <div style="float: right;"><span style="background-color: ${COLORS[v.mixture]}" class="badge">${GENRES[v.mixture]}</span></div>
+            </a>
           `);
         });
       });
-      socket.on('new', function(data) {
+      socket.on('new', function(v) {
         $('#mix-order-list').append(`
-          <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${data.id}">#${data.id} ${GENRES[data.genre]}</a>
+          <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${v.id}" data-mix-order-mixture="${v.mixture}">
+            <span class="badge badge-secondary">#${v.id}</span>
+            <span>${MIXTURES[v.mixture]}</span>
+            <div style="float: right;"><span style="background-color: ${COLORS[v.mixture]}" class="badge">${GENRES[v.mixture]}</span></div>
+          </a>
         `);
       });
       socket.on('paid', function(data) {
         $(`#mix-order-list .mix-list-item[data-mix-order-id=${data}]`).remove();
+        $('#mix-pay-info').empty();
       });
 
       socket.on('connect', function() {
         console.log('WS Connected');
+        $('#mix-conn-status-btn').removeClass('btn-success btn-danger');
+        $('#mix-conn-status-btn').addClass('btn-success');
       });
       socket.on('disconnect', function() {
         console.log('WS Disconnected');
+        $('#mix-conn-status-btn').removeClass('btn-success btn-danger');
+        $('#mix-conn-status-btn').addClass('btn-danger');
       });
 
-      $('#mix-finished-btn').on('click', function() {
+      $('#mix-conn-status-btn').on('click', function() {
+        location.reload();
+      });
+
+      $('#mix-order-list').on('click', '.mix-list-item', function (e) {
+        e.preventDefault();
+        $('#mix-pay-info').html(`
+          <p><h2><b>Order No.</b></h2></p>
+          <p><h2><b>#${$(this).data('mix-order-id')}</b></h2></p>
+          <hr class="my-4">
+          <p><h2>฿${PRICE_PER_SHOT}</h2></p>
+        `);
+      });
+
+      $('#mix-pay-btn').on('click', function() {
         var mix_order_id = $('#mix-order-list .mix-list-item.active').data('mix-order-id');
         if(typeof mix_order_id === 'undefined') return;
         socket.emit('pay', mix_order_id);

@@ -17,17 +17,23 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light">
       <span class="navbar-brand"><h1>Order</h1></span>
+      
+      <button class="btn" type="button" id="mix-conn-status-btn">
+        <span class="fa fa-redo"></span>
+      </button>
     </nav>
 
-    <button class="btn" value="0">Rock</button>
-    <button class="btn" value="1">Hip-Hop</button>
-    <button class="btn" value="2">Jazz</button>
-    <button class="btn" value="3">Electronics</button>
-    <button class="btn" value="4">Funk</button>
-    <button class="btn" value="5">Something</button>
+    <button class="btn" value="0">Jazzcuzzi</button>
+    <button class="btn" value="1">Frisky</button>
+    <button class="btn" value="2">Latinos</button>
+    <button class="btn" value="3">Eelektross</button>
+    <button class="btn" value="4">Rockumantary</button>
+    <button class="btn" value="5">A K A Hip</button>
 
+    <script src="js/jquery-3.0.0.slim.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/socket.io.js"></script>
     <script>
       var socket = io('http://localhost:3000/order', {
@@ -38,14 +44,22 @@
 
       socket.on('connect', function() {
         console.log('WS Connected');
+        $('#mix-conn-status-btn').removeClass('btn-success btn-danger');
+        $('#mix-conn-status-btn').addClass('btn-success');
       });
       socket.on('disconnect', function() {
         console.log('WS Disconnected');
+        $('#mix-conn-status-btn').removeClass('btn-success btn-danger');
+        $('#mix-conn-status-btn').addClass('btn-danger');
+      });
+
+      $('#mix-conn-status-btn').on('click', function() {
+        location.reload();
       });
 
       document.querySelectorAll('button').forEach((el) => {
         el.addEventListener('click', (evt) => {
-          socket.emit('new', { genre: evt.target.value });
+          socket.emit('new', { mixture: evt.target.value });
         });
       });
     </script>

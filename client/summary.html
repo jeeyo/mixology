@@ -42,23 +42,12 @@
         width: 100%;
         height: 60px;
       }
-
-      .mix-formula-block {
-        font-size: 24px;
-        font-weight: bold;
-        color: white;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        height: 60px;
-        line-height: 2.5em;
-        width: 100%;
-      }
     </style>
   </head>
 
   <body>
     <nav class="navbar navbar-light bg-light">
-      <span class="navbar-brand"><h1>Bartender</h1></span>
+      <span class="navbar-brand"><h1>Summary</h1></span>
       
       <button class="btn" type="button" id="mix-conn-status-btn">
         <span class="fa fa-redo"></span>
@@ -66,8 +55,6 @@
     </nav>
 
     <div class="mix-right-pane">
-      <button type="button" class="btn btn-success" id="mix-finish-btn"><i class="fas fa-cocktail"></i> Finished</button>
-      <div style="margin-top: 30px; text-align: center;" class="jumbotron" id="mix-finish-info"></div>
     </div>
 
     <div class="list-group mix-list-container" id="mix-order-list">
@@ -78,20 +65,13 @@
     <script src="js/socket.io.js"></script>
     <script>
 
-      const FORMULAS = [
-        ['Red', 'Aj', 'Bj', 'Lj', 'Mb', 'Ss'],
-        ['Blue', 'Psj', 'Sj', 'Lj', 'Lys', 'Ss'],
-        ['Red', 'Oj', 'Pj', 'Lj', 'Vas', 'Ss'],
-        ['Blue', 'Psj', 'Bj', 'Lj', 'Ots', 'Ss'],
-        ['Red', 'Sj', 'Oj', 'Lj', 'Sts', 'Ss'],
-        ['Blue', 'Aj', 'Pj', 'Lj', 'Aps', 'Ss'],
-      ];
-
       const MIXTURES = ['Jazzcuzzi', 'Frisky', 'Latinos', 'Eelektross', 'Rockumantary', 'A K A Hip'];
       const COLORS = ['#CDC0DF', '#FCD6D6', '#FFCF59', '#B070AF', '#F5949E', '#FBF27E'];
       const GENRES = ['Jazz', 'Funk', 'Latin', 'Electronics', 'Rock', 'Hip-Hop'];
 
-      var socket = io('http://localhost:3000/bartender', {
+      const PRICE_PER_SHOT = 80;
+
+      var socket = io('http://localhost:3000/summary', {
         reconnection: true,
         reconnectionDelay: 500,
         reconnectionAttempts: 10,
@@ -118,10 +98,6 @@
           </a>
         `);
       });
-      socket.on('finished', function(data) {
-        $(`#mix-order-list .mix-list-item[data-mix-order-id=${data}]`).remove();
-        $('#mix-finish-info').empty();
-      });
 
       socket.on('connect', function() {
         console.log('WS Connected');
@@ -136,27 +112,6 @@
 
       $('#mix-conn-status-btn').on('click', function() {
         location.reload();
-      });
-
-      $('#mix-order-list').on('click', '.mix-list-item', function (e) {
-        e.preventDefault();
-
-        const formula = FORMULAS[$(this).data('mix-order-mixture')];
-
-        $('#mix-finish-info').html(`
-          <div style="background-color: #f8b195" class="mix-formula-block">${formula[0]}</div>
-          <div style="background-color: #f67280" class="mix-formula-block">${formula[1]}</div>
-          <div style="background-color: #f67280" class="mix-formula-block">${formula[2]}</div>
-          <div style="background-color: #f67280" class="mix-formula-block">${formula[3]}</div>
-          <div style="background-color: #c06c84" class="mix-formula-block">${formula[4]}</div>
-          <div style="background-color: #c06c84" class="mix-formula-block">${formula[5]}</div>
-        `);
-      });
-
-      $('#mix-finish-btn').on('click', function() {
-        var mix_order_id = $('#mix-order-list .mix-list-item.active').data('mix-order-id');
-        if(typeof mix_order_id === 'undefined') return;
-        socket.emit('finish', mix_order_id);
       });
     </script>
   </body>
