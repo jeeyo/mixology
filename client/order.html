@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mixology</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+      html, body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <span class="navbar-brand"><h1>Order</h1></span>
+    </nav>
+
+    <button class="btn" value="0">Rock</button>
+    <button class="btn" value="1">Hip-Hop</button>
+    <button class="btn" value="2">Jazz</button>
+    <button class="btn" value="3">Electronics</button>
+    <button class="btn" value="4">Funk</button>
+    <button class="btn" value="5">Something</button>
+
+    <script src="js/socket.io.js"></script>
+    <script>
+      var socket = io('http://localhost:3000/order', {
+        reconnection: true,
+        reconnectionDelay: 500,
+        reconnectionAttempts: 10,
+      });
+
+      socket.on('connect', function() {
+        console.log('WS Connected');
+      });
+      socket.on('disconnect', function() {
+        console.log('WS Disconnected');
+      });
+
+      document.querySelectorAll('button').forEach((el) => {
+        el.addEventListener('click', (evt) => {
+          socket.emit('new', { genre: evt.target.value });
+        });
+      });
+    </script>
+  </body>
+</html>
