@@ -16,12 +16,6 @@
         user-select: none;
       }
 
-      .mix-list-container {
-        border-top: 1px solid black;
-        border-right: 1px solid black;
-        height: 100%;
-      }
-
       .mix-list-item {
         font-size: 30px;
         font-weight: bold;
@@ -70,7 +64,7 @@
       <div style="margin-top: 30px; text-align: center;" class="jumbotron" id="mix-finish-info"></div>
     </div>
 
-    <div class="list-group mix-list-container" id="mix-order-list">
+    <div class="list-group border-top border-right h-100" id="mix-order-list">
     </div>
 
     <script src="js/jquery-3.0.0.slim.min.js"></script>
@@ -86,7 +80,6 @@
         ['Red', 'Sj', 'Oj', 'Lj', 'Sts', 'Ss'],
         ['Blue', 'Aj', 'Pj', 'Lj', 'Aps', 'Ss'],
       ];
-
       const MIXTURES = ['Jazzcuzzi', 'Frisky', 'Latinos', 'Eelektross', 'Rockumantary', 'A K A Hip'];
       const COLORS = ['#CDC0DF', '#FCD6D6', '#FFCF59', '#B070AF', '#F5949E', '#FBF27E'];
       const GENRES = ['Jazz', 'Funk', 'Latin', 'Electronics', 'Rock', 'Hip-Hop'];
