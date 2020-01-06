@@ -8,6 +8,7 @@
     <style>
       html, body {
         height: 100%;
+        overflow: hidden;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -41,7 +42,7 @@
 
   <body>
     <nav class="navbar navbar-light bg-light">
-      <span class="navbar-brand"><h1>Summary</h1></span>
+      <span class="navbar-brand"><h1>DJ Even</h1></span>
       
       <button class="btn" type="button" id="mix-conn-status-btn">
         <span class="fa fa-redo"></span>
@@ -49,9 +50,12 @@
     </nav>
 
     <div class="mix-right-pane">
+      <button type="button" class="btn btn-success" id="mix-play-btn"><i class="fas fa-play"></i> Play</button>
     </div>
 
-    <div class="list-group border-top border-right h-100" id="mix-order-list">
+    <div style="overflow-y: scroll;" class="h-75">
+      <div class="list-group border-top border-right" id="mix-order-list">
+      </div>
     </div>
 
     <script src="js/jquery-3.0.0.slim.min.js"></script>
@@ -63,9 +67,7 @@
       const COLORS = ['#CDC0DF', '#FCD6D6', '#FFCF59', '#B070AF', '#F5949E', '#FBF27E'];
       const GENRES = ['Jazz', 'Funk', 'Latin', 'Electronics', 'Rock', 'Hip-Hop'];
 
-      const PRICE_PER_SHOT = 80;
-
-      var socket = io('http://localhost:3000/summary', {
+      var socket = io('http://{{ host }}:{{ port }}/dj_even', {
         reconnection: true,
         reconnectionDelay: 500,
         reconnectionAttempts: 10,
@@ -92,6 +94,12 @@
           </a>
         `);
       });
+      socket.on('battling', function() {
+        location.reload();
+      });
+      socket.on('played', function(data) {
+        $(`#mix-order-list .mix-list-item[data-mix-order-id=${data}]`).remove();
+      });
 
       socket.on('connect', function() {
         console.log('WS Connected');
@@ -106,6 +114,12 @@
 
       $('#mix-conn-status-btn').on('click', function() {
         location.reload();
+      });
+
+      $('#mix-play-btn').on('click', function() {
+        var mix_order_id = $('#mix-order-list .mix-list-item.active').data('mix-order-id');
+        if(typeof mix_order_id === 'undefined') return;
+        socket.emit('play', mix_order_id);
       });
     </script>
   </body>

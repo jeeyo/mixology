@@ -19,8 +19,7 @@ class Order extends Sequelize.Model {
   public finished_by_bartender!: boolean;
   public paid!: boolean;
   public played_by_dj!: boolean;
-
-  public readonly updatedAt!: Date;
+  public time!: string;
 }
 
 Order.init({
@@ -30,12 +29,10 @@ Order.init({
   finished_by_bartender: { type: Sequelize.BOOLEAN, allowNull: false },
   paid: { type: Sequelize.BOOLEAN, allowNull: false },
   played_by_dj: { type: Sequelize.BOOLEAN, allowNull: false },
-  updatedAt: { type: Sequelize.DATE, allowNull: true },
+  time: { type: Sequelize.STRING, allowNull: true },
 }, {
   sequelize: sequelize,
-  timestamps: true,
-  createdAt: false,
-  deletedAt: false,
+  timestamps: false,
   freezeTableName: true,
   tableName: 'orders',
 });
