@@ -87,6 +87,7 @@
       const COLORS = ['#CDC0DF', '#FCD6D6', '#FFCF59', '#B070AF', '#F5949E', '#FBF27E'];
       const GENRES = ['Jazz', 'Funk', 'Latin', 'Electronics', 'Rock', 'Hip-Hop'];
 
+      const MAX_SUMMARY_ENTRIES = 10;
       const PRICE_PER_SHOT = 80;
 
       var socket = io('http://{{ host }}:{{ port }}/summary', {
@@ -114,13 +115,16 @@
         });
       });
       socket.on('new', function(v) {
-        $('#mix-order-list').append(`
+        $('#mix-order-list').prepend(`
           <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${v.id}" data-mix-order-mixture="${v.mixture}">
             <span class="badge badge-secondary">#${v.id}</span>
             <span>${MIXTURES[v.mixture]}</span>
             <div style="float: right;"><span style="background-color: ${COLORS[v.mixture]}" class="badge">${GENRES[v.mixture]}</span></div>
           </a>
         `);
+
+        if($('.mix-list-item').length > MAX_SUMMARY_ENTRIES)
+          $('.mix-list-item').last().remove();
       });
       socket.on('battling', function(v) {
         $('.mix-battle-dialog-verb').text('stop');

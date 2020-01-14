@@ -4,7 +4,7 @@
     <title>Mixology</title>
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/fa.css">
     <style>
@@ -91,7 +91,7 @@
         <img style="width: 100%; height: 100%;" src="images/Circle-R.png">
       </div>
       <div class="orbit" style="transform: rotateZ(35deg) rotateY(70deg);">
-        <div class="electron" style="animation: move1 4s linear infinite;">
+        <div class="electron" style="animation: move1 2s linear infinite;">
           <img style="width: 100%; height: 100%; transform: rotateZ(-35deg);" src="images/Circle-Y.png">
         </div>
       </div>
@@ -101,7 +101,7 @@
         </div>
       </div-->
       <div class="orbit" style="transform: rotateZ(-35deg) rotateY(70deg);">
-        <div class="electron">
+        <div class="electron" style="animation: move1 3s linear infinite;">
           <img style="width: 100%; height: 100%; transform: rotateZ(35deg);" src="images/Circle-Y.png">
         </div>
       </div>
@@ -122,29 +122,29 @@
       </div-->
     </div>
 
-    <div class="container d-flex flex-column justify-content-center align-items-center" style="margin-bottom: 100px;">
+    <div class="container d-flex flex-column justify-content-center align-items-center" style="width: 600px; margin-bottom: 100px;">
 
       <div class="container my-1 d-flex flex-row justify-content-between">
-        <button class="btn btn-danger d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Red">Red</button>
-        <button class="btn btn-danger d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Blue">Blue</button>
+        <button class="btn btn-danger d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Red"></button>
+        <button class="btn btn-danger d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Blue"></button>
       </div>
       
       <div class="container my-1 d-flex flex-row justify-content-between">
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Oj">Oj</button>
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Pj">Pj</button>
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Aj">Aj</button>
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Bj">Bj</button>
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Sj">Sj</button>
-        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Psj">Psj</button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Oj"><div class="overlay"></div></button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Pj"><div class="overlay"></div></button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Aj"><div class="overlay"></div></button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Bj"><div class="overlay"></div></button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Sj"><div class="overlay"></div></button>
+        <button class="btn btn-warning d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Psj"><div class="overlay"></div></button>
       </div>
       
       <div class="container my-1 d-flex flex-row justify-content-between">
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Lys">Lys</button>
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Ots">Ots</button>
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Vas">Vas</button>
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Aps">Aps</button>
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Sts">Sts</button>
-        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn" data-mix-order-val="Mb">Mb</button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Lys"><div class="overlay"></div></button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Ots"><div class="overlay"></div></button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Vas"><div class="overlay"></div></button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Aps"><div class="overlay"></div></button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Sts"><div class="overlay"></div></button>
+        <button class="btn btn-success d-inline-block shadow mix-order-ingredient-btn disabled" data-mix-order-val="Mb"><div class="overlay"></div></button>
       </div>
     </div>
 
@@ -152,7 +152,10 @@
       <button class="btn" type="button" id="mix-conn-status-btn">
         <span class="fa fa-redo"></span> Refresh
       </button>
-      <button class="btn btn-warning disabled" id="mix-order-order-btn" disabled="disabled">
+      <button class="btn btn-primary" id="mix-order-random-btn">
+        <i class="fas fa-random"></i> Random
+      </button>
+      <button class="btn btn-info disabled" id="mix-order-order-btn" disabled="disabled">
         <i class="fas fa-cocktail"></i> Order
       </button>
     </nav>
@@ -180,8 +183,8 @@
         'Lys', 'Ots', 'Vas', 'Aps', 'Sts', 'Mb', 'Ss',
       ];
 
-      var my_formula = ['Lj', 'Ss'];
-      var available_ingredients = ALL_INGREDIENTS;
+      let my_formula = ['Lj', 'Ss'];
+      let available_ingredients = ALL_INGREDIENTS;
 
       var socket = io('http://{{ host }}:{{ port }}/order', {
         reconnection: true,
@@ -206,7 +209,6 @@
 
       $('.mix-order-ingredient-btn').each((i, v) => {
         $(v)
-          .text('')
           .removeClass('btn-danger btn-warning btn-success')
           .css({
             'background-color': 'transparent',
@@ -280,10 +282,19 @@
         });
       });
 
+      $('#mix-order-random-btn').on('click', function() {
+        let matched_index = Math.floor(Math.random() * FORMULAS.length);
+
+        socket.emit('new', { mixture: matched_index, randomized: true });
+
+        // TO-DO: play an animation here
+        setTimeout(location.reload(), 1000);
+      });
+
       $('#mix-order-order-btn').on('click', function() {
         var matched_index = FORMULAS.findIndex(f => JSON.stringify(f.slice().sort()) === JSON.stringify(my_formula.slice().sort()));
         if(matched_index < 0) return;
-        socket.emit('new', { mixture: matched_index });
+        socket.emit('new', { mixture: matched_index, randomized: false });
 
         // TO-DO: play an animation here
         setTimeout(location.reload(), 1000);

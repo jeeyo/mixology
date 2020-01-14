@@ -54,7 +54,7 @@ order_io.on('connection', function(socket: any) {
   socket.on('new', function(order_info: any) {
     db.Order.create({
       mixture: parseInt(order_info.mixture),
-      randomized_by_user: false,
+      randomized_by_user: order_info.randomized,
       finished_by_bartender: false,
       paid: false,
       played_by_dj: false,
@@ -145,8 +145,9 @@ summary_io.on('connection', function(socket: any) {
       paid: true,
     },
     order: [
-      ['time', 'ASC'],
+      ['time', 'DESC'],
     ],
+    limit: 10,
     raw: true,
   })
   .then((result: any) => {
