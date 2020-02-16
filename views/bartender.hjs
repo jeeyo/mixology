@@ -93,7 +93,7 @@
         reconnectionAttempts: 10,
       });
 
-      /*socket.on('remain', function(data) {
+      socket.on('remain', function(data) {
         $('#mix-order-list').empty();
         data.forEach((v) => {
           $('#mix-order-list').append(`
@@ -104,7 +104,7 @@
             </a>
           `);
         });
-      });*/
+      });
       socket.on('new', function(v) {
         $('#mix-order-list').append(`
           <a class="list-group-item list-group-item-action mix-list-item" data-toggle="list" href="#" data-mix-order-id="${v.id}" data-mix-order-mixture="${v.mixture}">
